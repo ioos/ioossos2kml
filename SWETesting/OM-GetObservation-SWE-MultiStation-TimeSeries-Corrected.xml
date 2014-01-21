@@ -19,7 +19,7 @@
   <!-- DISCLAIMER (optional) -->
   <gml:metaDataProperty xlink:title="disclaimer">
     <gml:GenericMetaData>
-      <gml:description>DISCLAIMER</gml:description>
+      <gml:description>Disclaimer for this GetObservation data response.</gml:description>
     </gml:GenericMetaData>
   </gml:metaDataProperty>
 
@@ -75,6 +75,7 @@
         <om:Process>
           <gml:member xlink:href="urn:ioos:station:wmo:41001" />
           <gml:member xlink:href="urn:ioos:station:wmo:41002" />
+          <gml:member xlink:href="urn:ioos:station:wmo:41003" />
         </om:Process>
       </om:procedure>
 
@@ -144,11 +145,15 @@
                 <!-- For each station in the result add an additional point -->
                 <gml:Point>
                   <gml:name>urn:ioos:station:wmo:41001</gml:name>
-                  <gml:pos>34.7 -72.73</gml:pos>
+                  <gml:pos>32.382 -75.415</gml:pos>
                 </gml:Point>
                 <gml:Point>
                 <gml:name>urn:ioos:station:wmo:41002</gml:name>
-                  <gml:pos>32.382 -75.415</gml:pos>
+                  <gml:pos>32.5 -78.5</gml:pos>
+                </gml:Point>
+                <gml:Point>
+                <gml:name>urn:ioos:station:wmo:41003</gml:name>
+                  <gml:pos>33.5 -79.5</gml:pos>
                 </gml:Point>
               </gml:pointMembers>
             </gml:MultiPoint>
