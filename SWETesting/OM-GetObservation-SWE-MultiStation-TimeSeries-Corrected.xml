@@ -510,7 +510,7 @@
       <!-- Count of records in swe:values -->
       <swe2:elementCount>
         <swe2:Count>
-          <swe2:value>13</swe2:value>
+          <swe2:value>14</swe2:value>
         </swe2:Count>
       </swe2:elementCount>
       <!-- Definition of fields in the DataArray -->
@@ -644,6 +644,7 @@
         2009-05-23T00:00:00Z,wmo_41001_sensor1,15.4,2.0,280
         2009-05-23T01:00:00Z,wmo_41001_sensor1,15.8,1.8,121
         2009-05-23T02:00:00Z,wmo_41001_sensor1,15.6,1.0,142
+        2009-05-25T02:00:00Z,wmo_41001_sensor1,14.1,2.0,200
         2009-05-23T00:00:00Z,wmo_41001_sensor2,5.6,8.0
         2009-05-23T01:00:00Z,wmo_41001_sensor2,5.8,8.2
         2009-05-23T02:00:00Z,wmo_41001_sensor2,5.7,8.5
