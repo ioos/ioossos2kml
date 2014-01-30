@@ -1,9 +1,13 @@
 from pyoos.collectors.ioos.swe_sos import IoosSweSos
+from pyoos.parsers.ioos.get_observation import IoosGetObservation
 from datetime import datetime, timedelta
+import requests
+
 
 def main():
-  #The observations we're interested in.
-  obsList = ['sea_water_temperature','sea_water_salinity']
+
+  #The observations we're interested in. THis is another gotcha, is it water_temperature or sea_water_temperature...
+  obsList = ['water_temperature','water_salinity']
   """
   Create a data collection object.
   Contructor parameters are:
@@ -11,7 +15,7 @@ def main():
     version - Optional default is '1.0.0' The SWE version the endpoint.
     xml - Optional default is None - The XML response from a GetCapabilities query of the server.
   """
-  dataCollector = IoosSweSos(url='http://ioossos.axiomalaska.com/52n-sos-ioos-stable/sos/kvp', xml=None)
+  dataCollector = IoosSweSos(url='http://129.252.139.124/thredds/sos/carocoops.cap2.buoy.nc', xml=None)
 
   #Loop through the offerings from the server.
   #Offerings are the stations/platforms/data device that the server house data from.
@@ -29,24 +33,50 @@ def main():
       #Check to see if the station offered has the observation we're interested in.
       #Loop through the observed_properties attribute and compare.
       obsFilterList = []
-      for obs in offer.observed_properties:
-        #Providers may or may not have there observed property in a mmi link format
-        #like: 'http://mmisw.org/ont/cf/parameter/air_temperature'
-        #We split it up just in case so we can get just the observation name.
-        property = obs.rsplit('/', 1)
-        if(len(property) > 1):
-          property = property[1]
-        if(property in obsList):
-          obsFilterList.append(obs)
+      #We want to query just the observations n the obsOfInterest list.
+      #The observer_properties should be coded with an MMI href, however due
+      #to ncSOS bug: https://github.com/asascience-open/ncSOS/issues/107 it adds
+      #a URN pattern. Regardless, an end user should just need to know the observation
+      #name and not the MMI url, so this tries to do a simple
+      #string find of our desired observation in the observed_property.
+      for obsOfInterest in obsList:
+        for observedProperty in offer.observed_properties:
+          if(observedProperty.find(obsOfInterest) != -1):
+            #Because of the ncSOS bug 107, we don't add the observedProperty. When
+            #that bug gets addressed, we would add the observedProperty.
+            #obsFilterList.append(observedProperty)
+            obsFilterList.append(obsOfInterest)
+            break
 
       if(len(obsFilterList)):
         #We create a filter based on the observations of interest,
-        # and a time frame of the last 2 hours.
-        dataCollector.filter(
-                             variables=obsFilterList,
-                             start=datetime.utcnow() - timedelta(hours=2))
-        response = dataCollector.collect(offerings=[offer.name])
-        print response
+        # and a time frame of the 12 hours of data from yesterday.
+        #There is an ncSOS bug that affects getting the current data
+        #Issue: https://github.com/asascience-open/ncSOS/issues/112
+        """
+        Filter function params:
+        bbox - Bounding box
+        start  - start date for records
+        end - end date for records
+        features - I assume it's a list of the stations of interest. Not sure why this is here
+          and then the offerings parameter in the collect() function.
+        variables - Poorly named parameter to house the observed_properties
+        """
+        try:
+          dataCollector.filter( features=[offer.name],
+                                 variables=obsFilterList,
+                                 start=datetime.utcnow() - timedelta(hours=24),
+                                 end=datetime.utcnow()  - timedelta(hours=12))
+          response = dataCollector.collect(offerings=[offer.name])
+          #Next thing to tackle is a sane way to loop through the data.
+          print response
+
+        except ows.ExceptionReport,e:
+          traceback.print_exc(e)
+
+        except Exception,e:
+          traceback.print_exc(e)
+
 
   return
 
