@@ -14,7 +14,7 @@
   xmlns:swe2="http://www.opengis.net/swe/2.0"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.opengis.net/om/1.0 http://schemas.opengis.net/om/1.0.0/om.xsd">
+  xsi:schemaLocation="http://www.opengis.net/om/1.0 http://schemas.opengis.net/om/1.0.0/om.xsd http://www.opengis.net/swe/2.0 http://schemas.opengis.net/sweCommon/2.0/swe.xsd">
 
   <!-- DISCLAIMER (optional) -->
   <gml:metaDataProperty xlink:title="disclaimer">
@@ -179,12 +179,7 @@
 <!-- Station 1 has 2 sensors -->
 <!-- Station 2 has 2 sensors -->
 <!-- Station 3 has 1 sensors -->
-<swe2:DataRecord
-  xmlns:swe2="http://www.opengis.net/swe/2.0"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.opengis.net/swe/2.0 http://schemas.opengis.net/sweCommon/2.0/swe.xsd"
-  definition="http://mmisw.org/ont/ioos/swe_element_type/observationRecord">
+<swe2:DataRecord definition="http://mmisw.org/ont/ioos/swe_element_type/observationRecord">
 
   <!-- STATIC DATA -->
   <!-- This field "stations" contains static data for all stations and sensors in the response -->
