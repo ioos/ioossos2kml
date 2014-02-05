@@ -1,13 +1,13 @@
 from pyoos.collectors.ioos.swe_sos import IoosSweSos
-from pyoos.parsers.ioos.get_observation import IoosGetObservation
+from owslib import ows
 from datetime import datetime, timedelta
-import requests
 
+import traceback
 
 def main():
 
   #The observations we're interested in. THis is another gotcha, is it water_temperature or sea_water_temperature...
-  obsList = ['water_temperature','water_salinity']
+  obsList = ['water_temperature','salinity']
   """
   Create a data collection object.
   Contructor parameters are:
@@ -55,7 +55,7 @@ def main():
         #Issue: https://github.com/asascience-open/ncSOS/issues/112
         """
         Filter function params:
-        bbox - Bounding box
+        bbox - Bounding box, not implemented for SOS calls currently.
         start  - start date for records
         end - end date for records
         features - I assume it's a list of the stations of interest. Not sure why this is here
@@ -67,9 +67,17 @@ def main():
                                  variables=obsFilterList,
                                  start=datetime.utcnow() - timedelta(hours=24),
                                  end=datetime.utcnow()  - timedelta(hours=12))
+          """
+          collect() params:
+          responseFormat - The desired return format for the SOS call.
+          eventTime - If the start/end times are not provided in the filter(), this param
+            can be passed in. Has to be properly formatted: %Y-%m-%dT%H:%M:%SZ/%Y-%m-%dT%H:%M:%SZ for a start/end time/date.
+          """
           response = dataCollector.collect(offerings=[offer.name])
+          #response = dataCollector.raw(offerings=[offer.name])
           #Next thing to tackle is a sane way to loop through the data.
           print response
+
 
         except ows.ExceptionReport,e:
           traceback.print_exc(e)
