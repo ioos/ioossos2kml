@@ -63,12 +63,14 @@ def main():
         variables - Poorly named parameter to house the observed_properties
         """
         try:
-          dataCollector.filter( features=[offer.name],
+          dataCollector.filter(
                                  variables=obsFilterList,
                                  start=datetime.utcnow() - timedelta(hours=24),
                                  end=datetime.utcnow()  - timedelta(hours=12))
           """
           collect() params:
+          offering - Station list
+
           responseFormat - The desired return format for the SOS call.
           eventTime - If the start/end times are not provided in the filter(), this param
             can be passed in. Has to be properly formatted: %Y-%m-%dT%H:%M:%SZ/%Y-%m-%dT%H:%M:%SZ for a start/end time/date.
