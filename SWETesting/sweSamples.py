@@ -74,12 +74,21 @@ def main():
           responseFormat - The desired return format for the SOS call.
           eventTime - If the start/end times are not provided in the filter(), this param
             can be passed in. Has to be properly formatted: %Y-%m-%dT%H:%M:%SZ/%Y-%m-%dT%H:%M:%SZ for a start/end time/date.
+
+          returns a list of OmObservation objects. OmObservation object has no member functions.
           """
           response = dataCollector.collect(offerings=[offer.name])
-          #response = dataCollector.raw(offerings=[offer.name])
-          #Next thing to tackle is a sane way to loop through the data.
-          print response
+          for obsRec in response:
+            stationRec = obsRec.feature
+            print "Station: %s Location: %s" % (stationRec.name, stationRec.get_location())
 
+            #The elements are a list of the observed_properties returned wrapped in a Point object.
+            for obsProp in stationRec.get_elements():
+              print "Observation Date/Time: %s" % (obsProp.get_time())
+              #print "Member names: %s" % (obsProp.get_member_names())
+              for member in obsProp.get_members():
+                for key,value in member.iteritems():
+                  print "%s = %s" % (key, value)
 
         except ows.ExceptionReport,e:
           traceback.print_exc(e)
